@@ -1,19 +1,19 @@
 import puppeteer from 'puppeteer';
 import fs from 'fs';
+import { Action } from "../types";
 
 
-const DELAY_BEFORE_CLICK = process.env.DELAY_BEFORE_CLICK as unknown as number //3000; // 3 milliseconds
+const DELAY_BEFORE_CLICK = process.env.DELAY_BEFORE_CLICK as unknown as number
 const erc20Address = process.env.ERC_20_ADDRESS!
-const PUMBO_URL = process.env.PUMBO_URL! ///'https://www.google.com';
-const DEXTOOLS_URL = process.env.DEXTOOLS_URL! //'https://www.dextools.io/';
+const PUMBO_URL = process.env.PUMBO_URL!
+const DEXTOOLS_URL = process.env.DEXTOOLS_URL!
 const LINKS = [
     `https://www.dextools.io/app/en/ether/pair-explorer/${process.env.ERC_20_ADDRESS}`,
 ];
 
 let proxyIndex = 0;
 
-
-const actions = [
+const actions: Action[] = [
     {
         waitForSelector: '.close',
         click: '.close',
@@ -127,24 +127,22 @@ export async function accessPumboAndDextools() {
 
 
 
+        const actionMap: { [key: string]: (arg: any) => Promise<any> } = {
+            waitForSelector: (selector) => page.waitForSelector(selector),
+            click: (selector) => page.click(selector),
+            type: ([selector, text]) => page.type(selector, text),
+            log: (message) => {
+                console.log(message);
+                return Promise.resolve();
+            },
+        };
+
         for (const action of actions) {
-            if (action.waitForSelector) {
-                await page.waitForSelector(action.waitForSelector);
+            for (const [key, value] of Object.entries(action)) {
+                if (key in actionMap) {
+                    await actionMap[key as keyof typeof actionMap](value);
+                }
             }
-
-            if (action.click) {
-                await page.click(action.click);
-            }
-
-            if (action.type) {
-                const [selector, text] = action.type;
-                await page.type(selector, text);
-            }
-
-            if (action.log) {
-                console.log(action.log);
-            }
-
             await page.waitForTimeout(DELAY_BEFORE_CLICK);
         }
 
