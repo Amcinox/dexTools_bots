@@ -1,25 +1,19 @@
 import puppeteer from 'puppeteer';
-import fs from 'fs';
-import { actions } from '../utils/actions';
+import { actions, proxies } from '../data';
 import { getChromePath } from "../utils/paths";
+import { DELAY_BEFORE_CLICK, DEXTOOLS_URL, LINKS, PUMBO_URL } from "../config";
 
-const DELAY_BEFORE_CLICK = process.env.DELAY_BEFORE_CLICK as unknown as number
-const PUMBO_URL = process.env.PUMBO_URL!
-const DEXTOOLS_URL = process.env.DEXTOOLS_URL!
-const LINKS = [
-    `https://www.dextools.io/app/en/ether/pair-explorer/${process.env.ERC_20_ADDRESS}`,
-];
 
 
 
 let proxyIndex = 0;
 export async function accessPumboAndDextools() {
     // Load proxy addresses from file
-    const proxies = fs.readFileSync('proxy.txt', 'utf8').split('\n').filter(Boolean);
+    // const proxies = fs.readFileSync('proxy.txt', 'utf8').split('\n').filter(Boolean);
 
     // Get proxy address
-    const proxy = proxies[proxyIndex];
-    const [ip, port, username, password] = proxy.split(':');
+    const { ip, port, username, password } = proxies[proxyIndex];
+    // const {ip, port, username, password} = proxy
 
     // Increase index for the next proxy address (if index exceeds the length of the array, it will return to the beginning)
     proxyIndex = (proxyIndex + 1) % proxies.length;

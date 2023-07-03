@@ -1,8 +1,6 @@
 import { accessPumboAndDextools } from './accessPumboAndDextools';
 import { delay } from '../utils/time';
-
-const THREAD_COUNT = process.env.THREAD_COUNT as unknown as number //1000; // Number of simulations at one moment
-const DELAY_BETWEEN_THREADS = process.env.DELAY_BETWEEN_THREADS as unknown as number //10000; // 10 seconds (The difference between simulations)
+import { THREAD_COUNT, DELAY_BETWEEN_THREADS } from '../config';
 
 export async function accessPumboAndDextoolsInThreads() {
     const promises = [];

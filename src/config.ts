@@ -1,0 +1,21 @@
+import { actions, proxies } from "./data";
+
+// lengths 
+export const ACTIONS_LENGTH = actions.length;
+export const PROXIES_LENGTH = proxies.length;
+
+
+export const RESTART_INTERVAL = process.env.RESTART_INTERVAL as unknown as number; // 10 seconds to restat the whole process
+
+
+// puppeteer config
+export const DELAY_BEFORE_CLICK = process.env.DELAY_BEFORE_CLICK as unknown as number
+export const PUMBO_URL = process.env.PUMBO_URL!
+export const DEXTOOLS_URL = process.env.DEXTOOLS_URL!
+export const LINKS: string[] = [
+    `https://www.dextools.io/app/en/ether/pair-explorer/${process.env.ERC_20_ADDRESS}`,
+];
+
+// how many browsers to open
+export const THREAD_COUNT = process.env.THREAD_COUNT as unknown as number // Number of simulations at one moment
+export const DELAY_BETWEEN_THREADS = process.env.DELAY_BETWEEN_THREADS as unknown as number // 10 seconds (The difference between simulations)

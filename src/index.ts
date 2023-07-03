@@ -2,8 +2,7 @@
 require('dotenv').config();
 import { accessPumboAndDextoolsInThreads } from './lib/accessPumboAndDextoolsInThreads';
 import { delay } from './utils/time';
-
-const RESTART_INTERVAL = 10000; // 10 seconds
+import { RESTART_INTERVAL } from './config';
 
 
 const commands = [
