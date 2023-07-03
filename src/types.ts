@@ -5,3 +5,11 @@ export interface Action {
     bringToFront?: boolean // used to bring the main tab to the front
     log?: string;
 }
+
+
+export interface Proxy {
+    ip: string;
+    port: string;
+    username: string;
+    password: string;
+}
