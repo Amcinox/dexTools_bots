@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer';
 import fs from 'fs';
 import { Action } from "../types";
-
+import { getChromePath } from "../utils/paths";
 
 const DELAY_BEFORE_CLICK = process.env.DELAY_BEFORE_CLICK as unknown as number
 const erc20Address = process.env.ERC_20_ADDRESS!
@@ -70,7 +70,7 @@ export async function accessPumboAndDextools() {
 
     const browser = await puppeteer.launch({
         headless: false, // Display Chrome browser
-        executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', //Where your GOOGLE CHROMEDRIVER is located
+        executablePath: getChromePath(), //'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', //Where your GOOGLE CHROMEDRIVER is located
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
