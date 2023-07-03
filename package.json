@@ -1,0 +1,35 @@
+{
+  "name": "opentecc_dextools_bots",
+  "version": "1.0.0",
+  "description": "Bot for Dextools",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "npx nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lakylife/dexTools_trending_bots.git"
+  },
+  "keywords": [
+    "bots",
+    "dextools"
+  ],
+  "author": "Mohamed EL BSSIR",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Amcinox/dexTools_bots/issues"
+  },
+  "homepage": "https://github.com/Amcinox/dexTools_bots#readme",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "puppeteer": "^20.7.4",
+    "request-promise": "^4.2.6"
+  },
+  "devDependencies": {
+    "@types/node": "^20.3.3",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
+  }
+}
