@@ -1,62 +1,18 @@
 import puppeteer from 'puppeteer';
 import fs from 'fs';
-import { Action } from "../types";
+import { actions } from '../utils/actions';
 import { getChromePath } from "../utils/paths";
 
 const DELAY_BEFORE_CLICK = process.env.DELAY_BEFORE_CLICK as unknown as number
-const erc20Address = process.env.ERC_20_ADDRESS!
 const PUMBO_URL = process.env.PUMBO_URL!
 const DEXTOOLS_URL = process.env.DEXTOOLS_URL!
 const LINKS = [
     `https://www.dextools.io/app/en/ether/pair-explorer/${process.env.ERC_20_ADDRESS}`,
 ];
 
+
+
 let proxyIndex = 0;
-
-const actions: Action[] = [
-    {
-        waitForSelector: '.close',
-        click: '.close',
-        log: 'Closing ad banner'
-    },
-    {
-        waitForSelector: '.search-mobile-button',
-        click: '.search-mobile-button',
-        log: 'Clicking on search button'
-    },
-    {
-        waitForSelector: '.search-pairs',
-        type: ['.search-pairs', erc20Address],
-        log: 'Entering ERC20 address and searching'
-    },
-    {
-        waitForSelector: '.auto-complete-text',
-        click: '.auto-complete-text'
-    },
-    {
-        waitForSelector: 'app-favorite-button',
-        click: 'app-favorite-button',
-        log: 'Clicking on favorite button'
-    },
-    {
-        waitForSelector: '.fa-share',
-        click: '.fa-share',
-        log: 'Clicking on share'
-    },
-    {
-        waitForSelector: 'button.btn.btn-primary.btn-swap-1',
-        click: 'button.btn.btn-primary.btn-swap-1',
-        log: 'Copying...'
-    },
-    {
-        waitForSelector: '.close.ng-star-inserted',
-        click: '.close.ng-star-inserted',
-        log: 'Exiting share'
-    }
-];
-
-
-
 export async function accessPumboAndDextools() {
     // Load proxy addresses from file
     const proxies = fs.readFileSync('proxy.txt', 'utf8').split('\n').filter(Boolean);
@@ -127,9 +83,12 @@ export async function accessPumboAndDextools() {
 
 
 
+
+        // add actions here with the key being the action name and the value being the argument
         const actionMap: { [key: string]: (arg: any) => Promise<any> } = {
             waitForSelector: (selector) => page.waitForSelector(selector),
             click: (selector) => page.click(selector),
+            bringToFront: () => page.bringToFront(),
             type: ([selector, text]) => page.type(selector, text),
             log: (message) => {
                 console.log(message);
