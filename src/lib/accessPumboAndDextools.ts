@@ -112,13 +112,13 @@ export async function accessPumboAndDextools(config: Config, session: number) {
             password: password,
         });
 
-        await page.goto(PUMBO_URL);
-        console.log('Launching One Page');
+        // await page.goto(PUMBO_URL);
+        // console.log('Launching One Page');
 
-        // Start timer
-        await page.evaluate(() => {
-            console.time('One Page Time');
-        });
+        // // Start timer
+        // await page.evaluate(() => {
+        //     console.time('One Page Time');
+        // });
 
         // Custom code for Pumbo Space
 
@@ -172,11 +172,11 @@ export async function accessPumboAndDextools(config: Config, session: number) {
         }
 
 
-        for (const link of LINKS) {
-            await page.waitForTimeout(DELAY_BEFORE_CLICK);
-            await page.goto(link);
-        }
-        console.log('Opening ETHERSCAN WEB');
+        // for (const link of LINKS) {
+        //     await page.waitForTimeout(DELAY_BEFORE_CLICK);
+        //     await page.goto(link);
+        // }
+        // console.log('Opening ETHERSCAN WEB');
 
         // Stop the timer in the browser console
         await page.evaluate(() => {
