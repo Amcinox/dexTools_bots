@@ -1,12 +1,13 @@
 import { accessPumboAndDextools } from './accessPumboAndDextools';
 import { delay } from '../utils/time';
-import { THREAD_COUNT, DELAY_BETWEEN_THREADS } from '../config';
+import { Config } from '../types';
 
-export async function accessPumboAndDextoolsInThreads() {
-    const promises = [];
-    for (let i = 0; i < THREAD_COUNT; i++) {
-        promises.push(accessPumboAndDextools());
-        await delay(DELAY_BETWEEN_THREADS); // Add delay between threads
+export async function accessPumboAndDextoolsInThreads(config: Config): Promise<void> {
+    const tasks: Promise<void>[] = [];
+    for (let i = 0; i < config.THREAD_COUNT; i++) {
+        const task = accessPumboAndDextools(config);
+        tasks.push(task);
+        await delay(config.DELAY_BETWEEN_THREADS);
     }
-    await Promise.all(promises);
+    await Promise.all(tasks);
 }

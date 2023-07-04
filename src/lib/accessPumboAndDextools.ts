@@ -1,13 +1,12 @@
 import puppeteer from 'puppeteer';
 import { actions, proxies } from '../data';
 import { getChromePath } from "../utils/paths";
-import { DELAY_BEFORE_CLICK, DEXTOOLS_URL, LINKS, PUMBO_URL } from "../config";
-
-
+import { Config } from '../types';
 
 
 let proxyIndex = 0;
-export async function accessPumboAndDextools() {
+export async function accessPumboAndDextools(config: Config) {
+    const { DELAY_BEFORE_CLICK, DEXTOOLS_URL, LINKS, PUMBO_URL } = config
     // Load proxy addresses from file
     // const proxies = fs.readFileSync('proxy.txt', 'utf8').split('\n').filter(Boolean);
 
@@ -84,6 +83,7 @@ export async function accessPumboAndDextools() {
             click: (selector) => page.click(selector),
             bringToFront: () => page.bringToFront(),
             type: ([selector, text]) => page.type(selector, text),
+            deleteCookies: () => page.deleteCookie(),
             log: (message) => {
                 console.log(message);
                 return Promise.resolve();

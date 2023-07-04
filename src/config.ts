@@ -1,4 +1,5 @@
 import { actions, proxies } from "./data";
+// import { minute } from "./utils/time";
 
 // lengths 
 export const ACTIONS_LENGTH = actions.length;
@@ -19,3 +20,16 @@ export const LINKS: string[] = [
 // how many browsers to open
 export const THREAD_COUNT = process.env.THREAD_COUNT as unknown as number // Number of simulations at one moment
 export const DELAY_BETWEEN_THREADS = process.env.DELAY_BETWEEN_THREADS as unknown as number // 10 seconds (The difference between simulations)
+
+// export const DELAY_BETWEEN_THREADS = minute / THREAD_COUNT; // 10 seconds (The difference between simulations)
+export default {
+    ACTIONS_LENGTH,
+    PROXIES_LENGTH,
+    RESTART_INTERVAL,
+    DELAY_BEFORE_CLICK,
+    PUMBO_URL,
+    DEXTOOLS_URL,
+    LINKS,
+    THREAD_COUNT,
+    DELAY_BETWEEN_THREADS
+}

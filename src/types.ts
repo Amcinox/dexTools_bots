@@ -13,3 +13,15 @@ export interface Proxy {
     username: string;
     password: string;
 }
+
+export interface Config {
+    ACTIONS_LENGTH: number;
+    PROXIES_LENGTH: number;
+    RESTART_INTERVAL: number;
+    DELAY_BEFORE_CLICK: number;
+    PUMBO_URL: string;
+    DEXTOOLS_URL: string;
+    LINKS: string[];
+    THREAD_COUNT: number;
+    DELAY_BETWEEN_THREADS: number;
+}

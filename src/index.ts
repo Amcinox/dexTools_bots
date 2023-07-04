@@ -1,20 +1,11 @@
 
 require('dotenv').config();
-import { accessPumboAndDextoolsInThreads } from './lib/accessPumboAndDextoolsInThreads';
 import { delay } from './utils/time';
 import { RESTART_INTERVAL } from './config';
+import { executeCommands } from './lib/commands';
 
 
-const commands = [
-  accessPumboAndDextoolsInThreads,
-];
 process.setMaxListeners(30);
-
-async function executeCommands() {
-  for (const command of commands) {
-    await command();
-  }
-}
 
 async function main() {
   while (true) {
@@ -22,8 +13,11 @@ async function main() {
 
     await delay(RESTART_INTERVAL);
     // Reset the commands array for repeating the commands
-    commands.length = 0;
-    commands.push(accessPumboAndDextoolsInThreads);
+    // commands.length = 0;
+    // commands.push({
+    //   config: config,
+    //   run: accessPumboAndDextoolsInThreads
+    // });
   }
 }
 
