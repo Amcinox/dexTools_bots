@@ -11,8 +11,8 @@ let port = 40000
 let thread_number = 0
 
 const baseURL = "http://192.168.1.3:9049"
-export async function accessPumboAndDextools(config: Config) {
-    let error;
+export async function accessPumboAndDextools(config: Config, session: number) {
+    let error: string | null | unknown = null
     let actionExecuted: string[] = [];
 
     const start = new Date().toLocaleString()
@@ -167,11 +167,12 @@ export async function accessPumboAndDextools(config: Config) {
             out_ip,
             thread_number,
             actionExecuted,
+            session,
             error,
             status: error ? "error" : "success",
             end: end
         }
-        writeLog(log, "thread");
+        writeLog(log, error ? "errors" : "thread");
         thread_number = thread_number + 1
         // No need to reopen the browser in this case
         console.log('Closing Browsers and repeating the function...');

@@ -7,12 +7,12 @@ import { writeLog } from '../utils/logUtils';
 
 interface Command {
     config: Config;
-    run: (config: Config) => Promise<void>;
+    run: (config: Config, session: number) => Promise<void>;
 }
 // ikon object 
 const commands: Command[] = [
     {
-        config: { ...config, THREAD_COUNT: 200, DELAY_BETWEEN_THREADS: minute / 200 },
+        config: { ...config, THREAD_COUNT: 200, DELAY_BETWEEN_THREADS: hour / 200 },
         run: accessPumboAndDextoolsInThreads
     },
     {
@@ -45,7 +45,7 @@ export async function executeCommands() {
         setTimeout(async () => {
             console.log("========== start new command  ============")
             const start = new Date().toLocaleString()
-            await command.run(command.config);
+            await command.run(command.config, session);
             const end = new Date().toLocaleString()
             const log = {
                 start,

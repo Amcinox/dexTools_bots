@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-type Type = "thread" | "command"
+type Type = "thread" | "command" | "errors"
 export function writeLog(log: any, type: Type) {
     console.log("Log Start")
     const logFileName = `log_${Date.now()}.json`;
