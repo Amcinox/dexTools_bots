@@ -123,8 +123,9 @@ export async function accessPumboAndDextools(config: Config, session: number) {
         // Custom code for Pumbo Space
 
 
-        page.on("error", (err) => {
-            console.log("error happen at the page: ", err);
+        page.on("error", async (err) => {
+            await page.close();
+            await browser.close();
             error = err
         });
 
