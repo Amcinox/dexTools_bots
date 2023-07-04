@@ -54,13 +54,16 @@ const ipList = [
     "176.100.150.179",
     "176.100.150.14",
     "176.100.156.234"]
+
+
+// 
 export const proxies: Proxy[] = ipList.map((ip) => {
     return {
         ip,
         port,
-        username,
-        password
+        username: "",
+        password: ""
     }
-})
 
+})
 

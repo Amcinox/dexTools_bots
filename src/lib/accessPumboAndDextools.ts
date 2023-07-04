@@ -1,21 +1,63 @@
 import puppeteer from 'puppeteer';
-import { actions, proxies } from '../data';
+import axios from 'axios';
 import { getChromePath } from "../utils/paths";
-import { Config } from '../types';
+import { Config, ProxyResult } from '../types';
+import { writeLog } from '../utils/logUtils';
+import { toQuery } from '../utils/formatString';
 
 
-let proxyIndex = 0;
+// let proxyIndex = 0;
+let port = 40000
+let thread_number = 0
+
+const baseURL = "http://192.168.1.3:9049"
 export async function accessPumboAndDextools(config: Config) {
-    const { DELAY_BEFORE_CLICK, DEXTOOLS_URL, LINKS, PUMBO_URL } = config
+    let error;
+    let actionExecuted: string[] = [];
+
+    const start = new Date().toLocaleString()
+
+    const { DELAY_BEFORE_CLICK, DEXTOOLS_URL, LINKS, PUMBO_URL, proxies, actions } = config
     // Load proxy addresses from file
     // const proxies = fs.readFileSync('proxy.txt', 'utf8').split('\n').filter(Boolean);
 
+
     // Get proxy address
-    const { ip, port, username, password } = proxies[proxyIndex];
+    // const { ip, port, username, password } = proxies[proxyIndex];
+
+    const query = {
+        num: 1,
+        state: 'all',
+        city: 'all',
+        zip: 'all',
+        t: 'json',
+        port: port,
+        isp: 'all'
+
+    }
+
+    const username = "";
+    const password = "";
+
+    const { data } = await axios.get(`${baseURL}/v1/ips${toQuery(query)}`)
+    console.log({ data })
+    if (data.msg !== "ok") {
+        return
+    }
+    port = (port + 1)
+    const { ip, out_ip } = data.data[0] as ProxyResult
+    // logs for browser 
+
+
     // const {ip, port, username, password} = proxy
 
+
+
+
+
+
     // Increase index for the next proxy address (if index exceeds the length of the array, it will return to the beginning)
-    proxyIndex = (proxyIndex + 1) % proxies.length;
+    // proxyIndex = (proxyIndex + 1) % config.proxies.length;
 
     const browser = await puppeteer.launch({
         headless: false, // Display Chrome browser
@@ -86,6 +128,7 @@ export async function accessPumboAndDextools(config: Config) {
             deleteCookies: () => page.deleteCookie(),
             log: (message) => {
                 console.log(message);
+                actionExecuted.push(message);
                 return Promise.resolve();
             },
         };
@@ -110,12 +153,26 @@ export async function accessPumboAndDextools(config: Config) {
         await page.evaluate(() => {
             console.timeEnd('DEXTOOLS Time');
         });
-    } catch (error) {
-        console.error('Error:', error);
+    } catch (err) {
+        console.error('Error:', err);
+        error = err
     } finally {
         // Close the browser at the end of each cycle
         await browser.close();
-
+        const end = new Date().toLocaleString()
+        const log = {
+            start: start,
+            config,
+            ip: ip,
+            out_ip,
+            thread_number,
+            actionExecuted,
+            error,
+            status: error ? "error" : "success",
+            end: end
+        }
+        writeLog(log, "thread");
+        thread_number = thread_number + 1
         // No need to reopen the browser in this case
         console.log('Closing Browsers and repeating the function...');
     }

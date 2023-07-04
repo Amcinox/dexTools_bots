@@ -31,5 +31,7 @@ export default {
     DEXTOOLS_URL,
     LINKS,
     THREAD_COUNT,
-    DELAY_BETWEEN_THREADS
+    DELAY_BETWEEN_THREADS,
+    proxies,
+    actions
 }

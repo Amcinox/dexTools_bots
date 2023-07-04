@@ -1,7 +1,8 @@
 import { accessPumboAndDextoolsInThreads } from './accessPumboAndDextoolsInThreads';
-import { minute } from '../utils/time';
+import { minute, hour } from '../utils/time';
 import { Config } from '../types';
 import config from '../config';
+import { writeLog } from '../utils/logUtils';
 
 
 interface Command {
@@ -9,24 +10,54 @@ interface Command {
     run: (config: Config) => Promise<void>;
 }
 // ikon object 
-const commands: Command[] = [{
-    config: config,
-    run: accessPumboAndDextoolsInThreads
-},
-{
-    // will launch 10 threads during 1 minute 
-    config: { ...config, THREAD_COUNT: 10, DELAY_BETWEEN_THREADS: minute / 10 },
-    run: accessPumboAndDextoolsInThreads
-}
+const commands: Command[] = [
+    {
+        config: { ...config, THREAD_COUNT: 200, DELAY_BETWEEN_THREADS: minute / 200 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 400, DELAY_BETWEEN_THREADS: hour / 400 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 600, DELAY_BETWEEN_THREADS: hour / 600 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 1000, DELAY_BETWEEN_THREADS: hour / 1000 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 1500, DELAY_BETWEEN_THREADS: hour / 1500 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 1600, DELAY_BETWEEN_THREADS: hour / 1600 },
+        run: accessPumboAndDextoolsInThreads
+    },
 ];
 
+
+
+let session = 0;
 export async function executeCommands() {
     commands.forEach((command, index) => {
         setTimeout(async () => {
-            // console time  started 
             console.log("========== start new command  ============")
+            const start = new Date().toLocaleString()
             await command.run(command.config);
+            const end = new Date().toLocaleString()
+            const log = {
+                start,
+                config: command.config,
+                index,
+                session,
+                end,
+            }
+            writeLog(log, "command");
+
         }, index * minute);
     });
+    session++;
 
 }
