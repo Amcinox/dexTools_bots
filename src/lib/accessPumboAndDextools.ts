@@ -62,7 +62,7 @@ export async function accessPumboAndDextools(config: Config, session: number) {
 
     const browser = await puppeteer.launch({
 
-        headless: false, // Display Chrome browser
+        headless: true, // Display Chrome browser
         executablePath: getChromePath(), //'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', //Where your GOOGLE CHROMEDRIVER is located
         args: [
             '--no-sandbox',
