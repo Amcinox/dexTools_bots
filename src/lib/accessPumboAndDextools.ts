@@ -4,13 +4,14 @@ import { getChromePath } from "../utils/paths";
 import { Config, ProxyResult } from '../types';
 import { writeLog } from '../utils/logUtils';
 import { toQuery } from '../utils/formatString';
+import { minute } from '../utils/time';
 
 
 // let proxyIndex = 0;
 let port = 40000
 let thread_number = 0
 
-const baseURL = "http://192.168.1.3:9049"
+const baseURL = "http://45.35.12.25:9049"
 export async function accessPumboAndDextools(config: Config, session: number) {
     let error: string | null | unknown = null
     let actionExecuted: string[] = [];
@@ -60,6 +61,7 @@ export async function accessPumboAndDextools(config: Config, session: number) {
     // proxyIndex = (proxyIndex + 1) % config.proxies.length;
 
     const browser = await puppeteer.launch({
+
         headless: false, // Display Chrome browser
         executablePath: getChromePath(), //'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', //Where your GOOGLE CHROMEDRIVER is located
         args: [
@@ -86,6 +88,23 @@ export async function accessPumboAndDextools(config: Config, session: number) {
 
     const page = await browser.newPage();
 
+
+    setTimeout(async () => {
+        try {
+            await page.close();
+        } catch (e) {
+            console.log(e)
+        }
+        try {
+
+            await browser.close();
+
+        } catch (e) {
+            console.log(e)
+        }
+    }, minute);
+
+
     try {
         // Authenticate for the proxy server
         await page.authenticate({
@@ -102,6 +121,15 @@ export async function accessPumboAndDextools(config: Config, session: number) {
         });
 
         // Custom code for Pumbo Space
+
+
+        page.on("error", (err) => {
+            console.log("error happen at the page: ", err);
+            error = err
+        });
+
+
+
 
         // End timer for Pumbo Space
         await page.evaluate(() => {

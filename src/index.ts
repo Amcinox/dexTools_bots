@@ -5,7 +5,7 @@ import { RESTART_INTERVAL } from './config';
 import { executeCommands } from './lib/commands';
 
 
-process.setMaxListeners(30);
+process.setMaxListeners(0);
 
 async function main() {
   while (true) {
