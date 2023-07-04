@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/Amcinox/dexTools_bots#readme",
   "dependencies": {
+    "axios": "^1.4.0",
     "dotenv": "^16.3.1",
     "puppeteer": "^20.7.4",
     "request-promise": "^4.2.6"
