@@ -24,4 +24,16 @@ export interface Config {
     LINKS: string[];
     THREAD_COUNT: number;
     DELAY_BETWEEN_THREADS: number;
+    proxies: Proxy[];
+    actions: Action[];
+}
+
+export interface ProxyResult {
+    ip: string,
+    port: number,
+    country: string,
+    state: string,
+    city: string,
+    zip: string,
+    out_ip: string
 }
