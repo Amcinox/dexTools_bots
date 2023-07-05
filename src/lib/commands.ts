@@ -43,20 +43,20 @@ let session = 0;
 export async function executeCommands() {
     commands.forEach((command, index) => {
         setTimeout(async () => {
-            console.log("========== start new command  ============")
+            console.log(`============  Command ${index} Started =============`)
             const start = new Date().toLocaleString()
             await command.run(command.config, session);
             const end = new Date().toLocaleString()
             const log = {
                 start,
-                config: command.config,
+                config: { ...command.config, proxies: undefined },
                 index,
                 session,
                 end,
             }
             writeLog(log, "command");
 
-        }, index * minute);
+        }, index * hour);
     });
     session++;
 

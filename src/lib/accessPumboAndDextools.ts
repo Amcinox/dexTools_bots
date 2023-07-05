@@ -1,68 +1,37 @@
 import puppeteer from 'puppeteer';
-import axios from 'axios';
 import { getChromePath } from "../utils/paths";
-import { Config, ProxyResult } from '../types';
+import { Config } from '../types';
 import { writeLog } from '../utils/logUtils';
-import { toQuery } from '../utils/formatString';
 import { minute } from '../utils/time';
 
 
-// let proxyIndex = 0;
-let port = 40000
+let proxyIndex = 0;
 let thread_number = 0
 
-const baseURL = "http://45.35.12.25:9049"
+
+
+
+
+
 export async function accessPumboAndDextools(config: Config, session: number) {
+    console.log(`============  thread ${thread_number} Started =============`)
+
     let error: string | null | unknown = null
     let actionExecuted: string[] = [];
 
     const start = new Date().toLocaleString()
 
     const { DELAY_BEFORE_CLICK, DEXTOOLS_URL, LINKS, PUMBO_URL, proxies, actions } = config
-    // Load proxy addresses from file
-    // const proxies = fs.readFileSync('proxy.txt', 'utf8').split('\n').filter(Boolean);
-
 
     // Get proxy address
-    // const { ip, port, username, password } = proxies[proxyIndex];
-
-    const query = {
-        num: 1,
-        state: 'all',
-        city: 'all',
-        zip: 'all',
-        t: 'json',
-        port: port,
-        isp: 'all'
-
-    }
-
-    const username = "";
-    const password = "";
-
-    const { data } = await axios.get(`${baseURL}/v1/ips${toQuery(query)}`)
-    console.log({ data })
-    if (data.msg !== "ok") {
-        return
-    }
-    port = (port + 1)
-    const { ip, out_ip } = data.data[0] as ProxyResult
-    // logs for browser 
-
-
-    // const {ip, port, username, password} = proxy
-
-
-
-
-
+    const { ip, port, username, password } = proxies[proxyIndex];
 
     // Increase index for the next proxy address (if index exceeds the length of the array, it will return to the beginning)
-    // proxyIndex = (proxyIndex + 1) % config.proxies.length;
+    proxyIndex = (proxyIndex + 1) % config.proxies.length;
 
     const browser = await puppeteer.launch({
 
-        headless: true, // Display Chrome browser
+        headless: "new", // Display Chrome browser
         executablePath: getChromePath(), //'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', //Where your GOOGLE CHROMEDRIVER is located
         args: [
             '--no-sandbox',
@@ -88,23 +57,6 @@ export async function accessPumboAndDextools(config: Config, session: number) {
 
     const page = await browser.newPage();
 
-
-    setTimeout(async () => {
-        try {
-            await page.close();
-        } catch (e) {
-            console.log(e)
-        }
-        try {
-
-            await browser.close();
-
-        } catch (e) {
-            console.log(e)
-        }
-    }, minute);
-
-
     try {
         // Authenticate for the proxy server
         await page.authenticate({
@@ -112,30 +64,20 @@ export async function accessPumboAndDextools(config: Config, session: number) {
             password: password,
         });
 
-        // await page.goto(PUMBO_URL);
-        // console.log('Launching One Page');
+        await page.goto(PUMBO_URL);
+        console.log('Launching One Page');
 
-        // // Start timer
-        // await page.evaluate(() => {
-        //     console.time('One Page Time');
-        // });
-
-        // Custom code for Pumbo Space
-
-
-        page.on("error", async (err) => {
-            await page.close();
-            await browser.close();
-            error = err
+        // Start timer
+        await page.evaluate(() => {
+            console.time('One Page Time');
         });
-
-
 
 
         // End timer for Pumbo Space
         await page.evaluate(() => {
             console.timeEnd('One Page Time');
         });
+        // Custom code for Pumbo Space
 
         await page.goto(DEXTOOLS_URL);
         console.log('Launching DEXTOOLS Web');
@@ -168,6 +110,7 @@ export async function accessPumboAndDextools(config: Config, session: number) {
                     await actionMap[key as keyof typeof actionMap](value);
                 }
             }
+
             await page.waitForTimeout(DELAY_BEFORE_CLICK);
         }
 
@@ -191,9 +134,8 @@ export async function accessPumboAndDextools(config: Config, session: number) {
         const end = new Date().toLocaleString()
         const log = {
             start: start,
-            config,
+            config: { ...config, proxies: undefined, actions: undefined },
             ip: ip,
-            out_ip,
             thread_number,
             actionExecuted,
             session,
