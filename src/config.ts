@@ -1,4 +1,5 @@
 import { actions, proxies } from "./data";
+import { Config } from "./types";
 // import { minute } from "./utils/time";
 
 // lengths 
@@ -22,7 +23,7 @@ export const THREAD_COUNT = process.env.THREAD_COUNT as unknown as number // Num
 export const DELAY_BETWEEN_THREADS = process.env.DELAY_BETWEEN_THREADS as unknown as number // 10 seconds (The difference between simulations)
 
 // export const DELAY_BETWEEN_THREADS = minute / THREAD_COUNT; // 10 seconds (The difference between simulations)
-export default {
+const config: Config = {
     ACTIONS_LENGTH,
     PROXIES_LENGTH,
     RESTART_INTERVAL,
@@ -33,5 +34,15 @@ export default {
     THREAD_COUNT,
     DELAY_BETWEEN_THREADS,
     proxies,
-    actions
+    actions,
+
+    // threads delay
+    // breathing_step: 5,
+    BREATHING_STEP: 5,
+    BREATHING_DELAY: 5000, // 1 minute
+
 }
+
+
+
+export default config;

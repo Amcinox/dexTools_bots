@@ -12,29 +12,29 @@ interface Command {
 // ikon object 
 const commands: Command[] = [
     {
-        config: { ...config, THREAD_COUNT: 200, DELAY_BETWEEN_THREADS: hour / 200 },
+        config: { ...config, THREAD_COUNT: 3, DELAY_BETWEEN_THREADS: minute / 3 },
         run: accessPumboAndDextoolsInThreads
     },
     {
-        config: { ...config, THREAD_COUNT: 400, DELAY_BETWEEN_THREADS: hour / 400 },
+        config: { ...config, THREAD_COUNT: 5, DELAY_BETWEEN_THREADS: minute / 5 },
         run: accessPumboAndDextoolsInThreads
     },
-    {
-        config: { ...config, THREAD_COUNT: 600, DELAY_BETWEEN_THREADS: hour / 600 },
-        run: accessPumboAndDextoolsInThreads
-    },
-    {
-        config: { ...config, THREAD_COUNT: 1000, DELAY_BETWEEN_THREADS: hour / 1000 },
-        run: accessPumboAndDextoolsInThreads
-    },
-    {
-        config: { ...config, THREAD_COUNT: 1500, DELAY_BETWEEN_THREADS: hour / 1500 },
-        run: accessPumboAndDextoolsInThreads
-    },
-    {
-        config: { ...config, THREAD_COUNT: 1600, DELAY_BETWEEN_THREADS: hour / 1600 },
-        run: accessPumboAndDextoolsInThreads
-    },
+    // {
+    //     config: { ...config, THREAD_COUNT: 600, DELAY_BETWEEN_THREADS: hour / 600 },
+    //     run: accessPumboAndDextoolsInThreads
+    // },
+    // {
+    //     config: { ...config, THREAD_COUNT: 1000, DELAY_BETWEEN_THREADS: hour / 1000 },
+    //     run: accessPumboAndDextoolsInThreads
+    // },
+    // {
+    //     config: { ...config, THREAD_COUNT: 1500, DELAY_BETWEEN_THREADS: hour / 1500 },
+    //     run: accessPumboAndDextoolsInThreads
+    // },
+    // {
+    //     config: { ...config, THREAD_COUNT: 1600, DELAY_BETWEEN_THREADS: hour / 1600 },
+    //     run: accessPumboAndDextoolsInThreads
+    // },
 ];
 
 

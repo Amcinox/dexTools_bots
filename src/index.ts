@@ -11,7 +11,9 @@ process.setMaxListeners(0);
 
 async function main() {
   // while (true) {
+
   await executeCommands();
+
 
   // await delay(RESTART_INTERVAL);
   // Reset the commands array for repeating the commands
@@ -26,4 +28,4 @@ async function main() {
 
 
 
-main().catch((err) => console.error(err));
+main().catch((err) => console.error({ Mainerr: err }));

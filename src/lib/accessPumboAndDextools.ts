@@ -14,8 +14,10 @@ let thread_number = 0
 
 
 export async function accessPumboAndDextools(config: Config, session: number) {
+    thread_number = thread_number + 1
+    const Tnumber = thread_number
     const t1 = Date.now()
-    console.log(`============  thread ${thread_number} Started =============`)
+    console.log(`============  thread ${Tnumber} Started =============`)
 
     let error: string | null | unknown = null
     let actionExecuted: string[] = [];
@@ -32,7 +34,7 @@ export async function accessPumboAndDextools(config: Config, session: number) {
 
     const browser = await puppeteer.launch({
 
-        headless: "new", // Display Chrome browser
+        headless: false, //"new", // Display Chrome browser
         executablePath: getChromePath(), //'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', //Where your GOOGLE CHROMEDRIVER is located
         args: [
             '--no-sandbox',
@@ -56,10 +58,12 @@ export async function accessPumboAndDextools(config: Config, session: number) {
         ],
     });
 
-    const page = await browser.newPage();
-    page.setDefaultTimeout(0);
+
 
     try {
+        const page = await browser.newPage();
+        page.setDefaultTimeout(0);
+
         // Authenticate for the proxy server
         await page.authenticate({
             username: username,
@@ -98,7 +102,8 @@ export async function accessPumboAndDextools(config: Config, session: number) {
             click: (selector) => page.click(selector),
             bringToFront: () => page.bringToFront(),
             type: ([selector, text]) => page.type(selector, text),
-            deleteCookies: () => page.deleteCookie(),
+            delay: (number) => page.waitForTimeout(number),
+
             log: (message) => {
                 console.log(message);
                 actionExecuted.push(message);
@@ -113,7 +118,7 @@ export async function accessPumboAndDextools(config: Config, session: number) {
                 }
             }
 
-            await page.waitForTimeout(DELAY_BEFORE_CLICK);
+            // await page.waitForTimeout(DELAY_BEFORE_CLICK);
         }
 
 
@@ -138,7 +143,7 @@ export async function accessPumboAndDextools(config: Config, session: number) {
             start: start,
             config: { ...config, proxies: undefined, actions: undefined },
             ip: ip,
-            thread_number,
+            Tnumber,
             actionExecuted,
             session,
             error,
@@ -146,10 +151,9 @@ export async function accessPumboAndDextools(config: Config, session: number) {
             end: end
         }
         writeLog(log, error ? "errors" : "thread");
-        thread_number = thread_number + 1
         // No need to reopen the browser in this case
         const t2 = Date.now()
-        console.log(`============  thread ${thread_number} Ended in ${t2 - t1} ms =============`)
+        console.log(`============  thread ${Tnumber} Ended in ${t2 - t1} ms =============`)
         console.log('Closing Browsers and repeating the function...');
     }
 }

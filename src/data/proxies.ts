@@ -1,8 +1,11 @@
 import { Proxy } from "../types";
 import fs from 'fs';
 
+const proxyFile = process.env.PROXY_FILE as string;
 
-export const proxies: any[] = fs.readFileSync('proxy.txt', 'utf8').split('\n').filter(Boolean).map((result: string) => {
+console.log({ proxyFile })
+
+export const proxies: any[] = fs.readFileSync(`${proxyFile}`, 'utf8').split('\n').filter(Boolean).map((result: string) => {
     const proxy = result.split(':');
     return {
         ip: proxy[0],

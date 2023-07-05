@@ -4,6 +4,7 @@ export interface Action {
     type?: [string, string];
     bringToFront?: boolean // used to bring the main tab to the front
     log?: string;
+    delay?: number;
 }
 
 
@@ -26,6 +27,8 @@ export interface Config {
     DELAY_BETWEEN_THREADS: number;
     proxies: Proxy[];
     actions: Action[];
+    BREATHING_STEP: number;
+    BREATHING_DELAY: number;
 }
 
 export interface ProxyResult {
