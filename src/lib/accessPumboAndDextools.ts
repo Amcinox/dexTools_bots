@@ -14,6 +14,7 @@ let thread_number = 0
 
 
 export async function accessPumboAndDextools(config: Config, session: number) {
+    const t1 = Date.now()
     console.log(`============  thread ${thread_number} Started =============`)
 
     let error: string | null | unknown = null
@@ -56,6 +57,7 @@ export async function accessPumboAndDextools(config: Config, session: number) {
     });
 
     const page = await browser.newPage();
+    page.setDefaultTimeout(0);
 
     try {
         // Authenticate for the proxy server
@@ -146,6 +148,8 @@ export async function accessPumboAndDextools(config: Config, session: number) {
         writeLog(log, error ? "errors" : "thread");
         thread_number = thread_number + 1
         // No need to reopen the browser in this case
+        const t2 = Date.now()
+        console.log(`============  thread ${thread_number} Ended in ${t2 - t1} ms =============`)
         console.log('Closing Browsers and repeating the function...');
     }
 }
