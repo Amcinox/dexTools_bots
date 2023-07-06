@@ -1,8 +1,8 @@
 import { accessPumboAndDextoolsInThreads } from './accessPumboAndDextoolsInThreads';
-import { minute, hour } from '../utils/time';
+import { minute, hour, delay } from '../utils/time';
 import { Config } from '../types';
 import config from '../config';
-import { writeLog } from '../utils/logUtils';
+import { createLog, updateLog } from '../utils/logUtils';
 
 
 interface Command {
@@ -12,13 +12,102 @@ interface Command {
 // ikon object 
 const commands: Command[] = [
     {
-        config: { ...config, THREAD_COUNT: 3, DELAY_BETWEEN_THREADS: minute / 3 },
+        config: { ...config, THREAD_COUNT: 240, DELAY_BETWEEN_THREADS: 15000 },
         run: accessPumboAndDextoolsInThreads
     },
     {
-        config: { ...config, THREAD_COUNT: 5, DELAY_BETWEEN_THREADS: minute / 5 },
+        config: { ...config, THREAD_COUNT: 240, DELAY_BETWEEN_THREADS: 15000 },
         run: accessPumboAndDextoolsInThreads
     },
+    {
+        config: { ...config, THREAD_COUNT: 240, DELAY_BETWEEN_THREADS: 15000 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 240, DELAY_BETWEEN_THREADS: 15000 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 240, DELAY_BETWEEN_THREADS: 15000 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 240, DELAY_BETWEEN_THREADS: 15000 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 240, DELAY_BETWEEN_THREADS: 15000 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 240, DELAY_BETWEEN_THREADS: 15000 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 240, DELAY_BETWEEN_THREADS: 15000 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 240, DELAY_BETWEEN_THREADS: 15000 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 240, DELAY_BETWEEN_THREADS: 15000 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 240, DELAY_BETWEEN_THREADS: 15000 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 240, DELAY_BETWEEN_THREADS: 15000 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 240, DELAY_BETWEEN_THREADS: 15000 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 240, DELAY_BETWEEN_THREADS: 15000 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 240, DELAY_BETWEEN_THREADS: 15000 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 240, DELAY_BETWEEN_THREADS: 15000 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 240, DELAY_BETWEEN_THREADS: 15000 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 240, DELAY_BETWEEN_THREADS: 15000 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 240, DELAY_BETWEEN_THREADS: 15000 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 240, DELAY_BETWEEN_THREADS: 15000 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 240, DELAY_BETWEEN_THREADS: 15000 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 240, DELAY_BETWEEN_THREADS: 15000 },
+        run: accessPumboAndDextoolsInThreads
+    },
+    {
+        config: { ...config, THREAD_COUNT: 240, DELAY_BETWEEN_THREADS: 15000 },
+        run: accessPumboAndDextoolsInThreads
+    },
+
     // {
     //     config: { ...config, THREAD_COUNT: 600, DELAY_BETWEEN_THREADS: hour / 600 },
     //     run: accessPumboAndDextoolsInThreads
@@ -39,25 +128,23 @@ const commands: Command[] = [
 
 
 
-let session = 0;
 export async function executeCommands() {
     commands.forEach((command, index) => {
         setTimeout(async () => {
             console.log(`============  Command ${index} Started =============`)
             const start = new Date().toLocaleString()
-            await command.run(command.config, session);
+            // to create log file
+            createLog(
+                index, start, command.config
+            );
+            await command.run(command.config, index);
             const end = new Date().toLocaleString()
-            const log = {
-                start,
-                config: { ...command.config, proxies: undefined },
-                index,
-                session,
-                end,
-            }
-            writeLog(log, "command");
+
+            // a delay to let the last thread finish and update the log file before updating the end time
+            await delay(2000)
+            updateLog(index, { end: end }, "command");
 
         }, index * hour);
     });
-    session++;
 
 }

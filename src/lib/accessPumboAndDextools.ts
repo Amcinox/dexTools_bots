@@ -1,19 +1,21 @@
 import puppeteer from 'puppeteer';
 import { getChromePath } from "../utils/paths";
 import { Config } from '../types';
-import { writeLog } from '../utils/logUtils';
+import { updateLog, writeErrorLog } from '../utils/logUtils';
 import { minute } from '../utils/time';
 
 
 let proxyIndex = 0;
 let thread_number = 0
+let total_success = 0
+let total_failed = 0
 
 
 
 
 
 
-export async function accessPumboAndDextools(config: Config, session: number) {
+export async function accessPumboAndDextools(config: Config, commandIndex: number) {
     thread_number = thread_number + 1
     const Tnumber = thread_number
     const t1 = Date.now()
@@ -37,7 +39,7 @@ export async function accessPumboAndDextools(config: Config, session: number) {
     try {
         browser = await puppeteer.launch({
 
-            headless: false, //"new", // Display Chrome browser
+            headless: "new", // Display Chrome browser
             executablePath: getChromePath(), //'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', //Where your GOOGLE CHROMEDRIVER is located
             args: [
                 '--no-sandbox',
@@ -68,12 +70,12 @@ export async function accessPumboAndDextools(config: Config, session: number) {
         const log = {
             start,
             config: { ...config, proxies: undefined },
-            session,
+
             end,
             error,
             thread_number: Tnumber,
         }
-        writeLog(log, "command");
+        // log error here to file
         return
     }
 
@@ -138,7 +140,7 @@ export async function accessPumboAndDextools(config: Config, session: number) {
                 }
             }
 
-            // await page.waitForTimeout(DELAY_BEFORE_CLICK);
+            await page.waitForTimeout(DELAY_BEFORE_CLICK);
         }
 
 
@@ -152,28 +154,36 @@ export async function accessPumboAndDextools(config: Config, session: number) {
         await page.evaluate(() => {
             console.timeEnd('DEXTOOLS Time');
         });
+        total_success = total_success + 1
     } catch (err) {
         console.error('Error:', err);
         error = err
+        total_failed = total_failed + 1
     } finally {
         // Close the browser at the end of each cycle
         await browser.close();
         const end = new Date().toLocaleString()
         const log = {
             start: start,
-            config: { ...config, proxies: undefined, actions: undefined },
             ip: ip,
             Tnumber,
             actionExecuted,
-            session,
             error,
+            thread_number,
             status: error ? "error" : "success",
             end: end
         }
-        writeLog(log, error ? "errors" : "thread");
+        if (error) {
+            writeErrorLog(commandIndex, log, "thread")
+        }
+        updateLog(commandIndex, log, "thread");
+
         // No need to reopen the browser in this case
         const t2 = Date.now()
         console.log(`============  thread ${Tnumber} Ended in ${t2 - t1} ms =============`)
+        console.log("Total Success: ", total_success)
+        console.log("Total Failed: ", total_failed)
+        console.log("====================================================================")
         console.log('Closing Browsers and repeating the function...');
     }
 }
