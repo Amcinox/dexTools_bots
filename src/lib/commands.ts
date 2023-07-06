@@ -131,7 +131,7 @@ const commands: Command[] = [
 export async function executeCommands() {
     commands.forEach((command, index) => {
         setTimeout(async () => {
-            console.log(`============  Command ${index} Started =============`)
+            console.log(`==Command ${index} Started===`)
             const start = new Date().toLocaleString()
             // to create log file
             createLog(

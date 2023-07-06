@@ -19,7 +19,7 @@ export async function accessPumboAndDextools(config: Config, commandIndex: numbe
     thread_number = thread_number + 1
     const Tnumber = thread_number
     const t1 = Date.now()
-    console.log(`============  thread ${Tnumber} Started =============`)
+    console.log(`==thread ${Tnumber} Started===`)
 
     let error: string | null | unknown = null
     let actionExecuted: string[] = [];
