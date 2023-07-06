@@ -39,10 +39,10 @@ const config: Config = {
 
     // threads delay
     // breathing_step: 5,
-    BREATHING_STEP: 5,
-    BREATHING_DELAY: 5000, // 1 minute
-    LONG_BREATHING_STEP: 240,
-    LONG_BREATHING_DELAY: minute * 7
+    BREATHING_STEP: 20,
+    BREATHING_DELAY: 60000, // 1 minute
+    LONG_BREATHING_STEP: 120,
+    LONG_BREATHING_DELAY: minute * 5
 
 }
 
