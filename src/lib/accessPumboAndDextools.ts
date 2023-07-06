@@ -180,10 +180,10 @@ export async function accessPumboAndDextools(config: Config, commandIndex: numbe
 
         // No need to reopen the browser in this case
         const t2 = Date.now()
-        console.log(`============  thread ${Tnumber} Ended in ${t2 - t1} ms =============`)
+        console.log(`==thread ${Tnumber} Ended in ${t2 - t1} ms=`)
         console.log("Total Success: ", total_success)
         console.log("Total Failed: ", total_failed)
-        console.log("====================================================================")
+        console.log("===============")
         console.log('Closing Browsers and repeating the function...');
     }
 }
