@@ -32,31 +32,51 @@ export async function accessPumboAndDextools(config: Config, session: number) {
     // Increase index for the next proxy address (if index exceeds the length of the array, it will return to the beginning)
     proxyIndex = (proxyIndex + 1) % config.proxies.length;
 
-    const browser = await puppeteer.launch({
+    let browser;
 
-        headless: false, //"new", // Display Chrome browser
-        executablePath: getChromePath(), //'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', //Where your GOOGLE CHROMEDRIVER is located
-        args: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-            '--disable-gpu',
-            '--disable-dev-shm-usage',
-            '--disable-software-rasterizer',
-            '--disable-extensions',
-            '--mute-audio',
-            '--disable-application-cache',
-            '--media-cache-size=1',
-            '--aggressive-cache-discard',
-            '--window-size=800,600', // Set the window size to 800x600
-            // '--disable-infobars',
-            // '--disable-notifications',
-            '--disable-offline-auto-reload',
-            '--disable-offline-auto-reload-visible-only',
-            '--blink-settings=imagesEnabled=false',
-            '--disable-image-loading',
-            `--proxy-server=${ip}:${port}`,
-        ],
-    });
+    try {
+        browser = await puppeteer.launch({
+
+            headless: false, //"new", // Display Chrome browser
+            executablePath: getChromePath(), //'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', //Where your GOOGLE CHROMEDRIVER is located
+            args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-gpu',
+                '--disable-dev-shm-usage',
+                '--disable-software-rasterizer',
+                '--disable-extensions',
+                '--mute-audio',
+                '--disable-application-cache',
+                '--media-cache-size=1',
+                '--aggressive-cache-discard',
+                '--window-size=800,600', // Set the window size to 800x600
+                // '--disable-infobars',
+                // '--disable-notifications',
+                '--disable-offline-auto-reload',
+                '--disable-offline-auto-reload-visible-only',
+                '--blink-settings=imagesEnabled=false',
+                '--disable-image-loading',
+                `--proxy-server=${ip}:${port}`,
+            ],
+            timeout: 120000,
+        });
+    } catch (e) {
+        console.log(e)
+        error = e
+        const end = new Date().toLocaleString()
+        const log = {
+            start,
+            config: { ...config, proxies: undefined },
+            session,
+            end,
+            error,
+            thread_number: Tnumber,
+        }
+        writeLog(log, "command");
+        return
+    }
+
 
 
 
