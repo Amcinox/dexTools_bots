@@ -7,7 +7,9 @@ export async function accessPumboAndDextoolsInThreads(config: Config, session: n
     const tasks: Promise<void>[] = [];
 
     for (let i = 0; i < config.THREAD_COUNT; i++) {
-        let Tdelay = i % config.BREATHING_STEP ? config.DELAY_BETWEEN_THREADS : config.BREATHING_DELAY
+        let Tdelay = config.DELAY_BETWEEN_THREADS
+        if (i % config.LONG_BREATHING_STEP === 0) Tdelay = config.LONG_BREATHING_DELAY
+        else if (i % config.BREATHING_STEP === 0) Tdelay = config.BREATHING_DELAY
         // event for each browser 
 
         const task = accessPumboAndDextools(config, session);

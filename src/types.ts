@@ -29,6 +29,8 @@ export interface Config {
     actions: Action[];
     BREATHING_STEP: number;
     BREATHING_DELAY: number;
+    LONG_BREATHING_STEP: number,
+    LONG_BREATHING_DELAY: number
 }
 
 export interface ProxyResult {

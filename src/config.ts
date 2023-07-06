@@ -1,5 +1,6 @@
 import { actions, proxies } from "./data";
 import { Config } from "./types";
+import { minute } from "./utils/time";
 // import { minute } from "./utils/time";
 
 // lengths 
@@ -40,6 +41,8 @@ const config: Config = {
     // breathing_step: 5,
     BREATHING_STEP: 5,
     BREATHING_DELAY: 5000, // 1 minute
+    LONG_BREATHING_STEP: 240,
+    LONG_BREATHING_DELAY: minute * 7
 
 }
 
